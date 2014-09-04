@@ -10,23 +10,6 @@ using namespace std;
 
 void drawField(IplImage *field, int cell, int box_x, int box_y)
 {
-    /*
-    int width_field = 500;
-    int height_field = 500;
-    int cell = 50;
-    int box_x = width_field/cell;
-    int box_y = height_field/cell;
-
-    cout << "количество квадратов: "    << box_x*box_y <<endl;
-    cout << "количество в 1-м столбе: " << box_y << endl;
-    cout << "количество в 1-й строке: " << box_x << endl;
-    cout << "ширина и высота квадрата : " << cell <<endl;
-
-    field = cvCreateImage(cvSize(width_field, height_field), 8, 3);
-
-    cvSet(field, cvScalar(255, 255, 255));
-    */
-
 
     CvPoint point_1;
     CvPoint point_2;
@@ -63,14 +46,6 @@ void drawFood(IplImage *img,int cell, int box_x , int box_y,CvPoint &appel, int 
     appel.x = appel_x * cell+cell/2;
     appel.y = appel_y * cell+cell/2;
     cvCircle(img, appel, 10, CV_RGB(r, g, b), -1, 8);
-    //   cout <<appel.x <<" - "<< appel.y<< endl;
-
-    // cvCircle(img, appel, 5, CV_RGB(0, 0, 0), 1, 8);
-    // яблоко размещаем рандомом
-    // случайным образом назначаем строку и столбик
-
-    // лишь бы на самой змее
-
 
 }
 
@@ -79,9 +54,8 @@ void drawSnake(vector<CvPoint> *body)
 
 }
 
-void moveSnake( char c,int stop,CvPoint cir,int cell, IplImage *currFrame)
+void moveSnake( char &cc,char &c,CvPoint &cir,int cell)
 {
-    char cc = cvWaitKey(stop);
 
     if(cc==83)
         c=cc;
@@ -118,7 +92,7 @@ void moveSnake( char c,int stop,CvPoint cir,int cell, IplImage *currFrame)
     {
         cir.y = cir.y - cell;
     }
-    cvCircle(currFrame, cvPoint (cir.x , cir.y), 3, CV_RGB( 250, 0, 0), -1, 8);
+    //cvCircle(currFrame, cvPoint (cir.x , cir.y), 3, CV_RGB( 250, 0, 0), -1, 8);
 
 
 
@@ -192,57 +166,18 @@ int main()
 
         char cc = cvWaitKey(stop);
 
-        if(cc==83)
-            c=cc;
-
-        if(cc==82)
-            c=cc;
-
-        if(cc==81)
-            c=cc;
-
-        if(cc==84)
-            c=cc;
-
-        //если нажата стрелка вправо то двигаемся вправо
-        if ( c == 83 )
-        {
-            cir.x = cir.x + cell;
-        }
-
-        //если нажата стрелка вниз то двигаемся вниз
-        if ( c == 84)
-        {
-            cir.y = cir.y + cell;
-        }
-
-        //если нажата стрелка влево то двигаемся влево
-        if ( c == 81)
-        {
-            cir.x = cir.x - cell;
-        }
-
-        //если нажата стрелка вверх то двигаемся вверх
-        if ( c == 82)
-        {
-            cir.y = cir.y - cell;
-        }
-
+        moveSnake(cc,c,cir,cell);
         cvCircle(currFrame, cvPoint (cir.x , cir.y), 25, CV_RGB( 250, 0, 0), -1, 8);
-        cvShowImage( nwPlayField, currFrame );
 
         if (cc == 27||finish == number_of_apples||cir.x < 0 || cir.x  == width_field || cir.x > width_field || cir.y < 0 || cir.y == height_field || cir.y > height_field)
         {
             break;
         }
+
+        cvShowImage( nwPlayField, currFrame );
     }
-    //    IplImage* fin = cvCreateImage(cvSize(width_field, height_field), 8, 3);
-    //   cvSet(fin, cvScalar(0, 0, 0));
 
-    // задаём точку для вывода текста
     CvPoint pt = cvPoint( height_field/4, width_field/2 );
-
-    // инициализация шрифта
     CvFont font;
 
     if  (number_of_apples == finish )
@@ -258,6 +193,7 @@ int main()
     }
     cvShowImage( nwPlayField, currFrame );
     cvWaitKey(10000);
+
     // освобождаем ресурсы
     cvReleaseImage(&field);
     cvReleaseImage(&currFrame);
