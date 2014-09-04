@@ -124,7 +124,6 @@ void moveSnake( char c,int stop,CvPoint cir,int cell, IplImage *currFrame)
 
 }
 
-
 int main()
 {
     ushort stop = 200;         // задержка между кадрами
@@ -177,18 +176,20 @@ int main()
         if (appel.x == cir.x && appel.y == cir.y  )
         {
             cvFloodFill(field, appel, cvScalar(255, 255, 255));
+
             drawFood(field,cell,box_x,box_y,appel, r, g, b);
             number_of_apples++;
             stop = stop - 5;
             cout <<appel.x <<" "<< appel.y<<"          "<<number_of_apples<<"/"<<finish <<endl;
-        }
 
+        }
         if (number_of_apples == finish - 1)
         {
-            cvCircle(currFrame, cvPoint (appel.x , appel.y), 10, CV_RGB( 0, 250, 0), 1, 8);
-            cvCircle(currFrame, cvPoint (appel.x , appel.y), 13, CV_RGB( 0, 0, 250), 1, 8);
-            cvCircle(currFrame, cvPoint (appel.x , appel.y), 16, CV_RGB( 225, 0, 0), 1, 8);
+            cvCircle(currFrame, cvPoint (appel.x , appel.y), 16, CV_RGB( 0, 250, 0), 2, 8);
+            cvCircle(currFrame, cvPoint (appel.x , appel.y), 13, CV_RGB( 0, 0, 250), 2, 8);
+            cvCircle(currFrame, cvPoint (appel.x , appel.y), 10, CV_RGB( 225, 0, 0), 2, 8);
         }
+
         char cc = cvWaitKey(stop);
 
         if(cc==83)
@@ -235,7 +236,28 @@ int main()
             break;
         }
     }
+    //    IplImage* fin = cvCreateImage(cvSize(width_field, height_field), 8, 3);
+    //   cvSet(fin, cvScalar(0, 0, 0));
 
+    // задаём точку для вывода текста
+    CvPoint pt = cvPoint( height_field/4, width_field/2 );
+
+    // инициализация шрифта
+    CvFont font;
+
+    if  (number_of_apples == finish )
+    {
+        cvInitFont( &font, CV_FONT_HERSHEY_COMPLEX,3.0, 2.0, 0, 2, CV_AA);
+        cvPutText(currFrame, "W I N", pt, &font, CV_RGB(255, 255, 0) );
+    }
+
+    else
+    {
+        cvInitFont( &font, CV_FONT_HERSHEY_COMPLEX,2.0, 1.0, 0, 2, CV_AA);
+        cvPutText(currFrame, "Game Over", pt, &font, CV_RGB(150, 0, 150) );
+    }
+    cvShowImage( nwPlayField, currFrame );
+    cvWaitKey(10000);
     // освобождаем ресурсы
     cvReleaseImage(&field);
     cvReleaseImage(&currFrame);
