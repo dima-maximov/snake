@@ -49,66 +49,46 @@ void drawFood(IplImage *img,int cell, int box_x , int box_y,CvPoint &appel, int 
 
 }
 
-void drawSnake(vector<CvPoint> *body)
+void drawSnake(vector<CvPoint> &body, IplImage *currFrame)
 {
+    cvCircle(currFrame, body.at(0), 25, CV_RGB( 250, 0, 0), -1, 8);
 
 }
 
-void moveSnake( char &cc,char &c,CvPoint &cir,int cell)
+void moveSnake( char &dir, vector<CvPoint> &body, int cell)
 {
-
-    if(cc==83)
-        c=cc;
-
-    if(cc==82)
-        c=cc;
-
-    if(cc==81)
-        c=cc;
-
-    if(cc==84)
-        c=cc;
+    //cout << "cc = " << (int)cc << " c = " << (int)c << endl;
+    //cout.flush();
 
     //если нажата стрелка вправо то двигаемся вправо
-    if ( c == 83 )
-    {
-        cir.x = cir.x + cell;
-    }
+    if ( dir == 83 )
+        body.at(0).x = body.at(0).x + cell;
 
     //если нажата стрелка вниз то двигаемся вниз
-    if ( c == 84)
-    {
-        cir.y = cir.y + cell;
-    }
+    if ( dir == 84)
+        body.at(0).y = body.at(0).y + cell;
 
     //если нажата стрелка влево то двигаемся влево
-    if ( c == 81)
-    {
-        cir.x = cir.x - cell;
-    }
+    if ( dir == 81)
+        body.at(0).x = body.at(0).x - cell;
 
     //если нажата стрелка вверх то двигаемся вверх
-    if ( c == 82)
-    {
-        cir.y = cir.y - cell;
-    }
-    //cvCircle(currFrame, cvPoint (cir.x , cir.y), 3, CV_RGB( 250, 0, 0), -1, 8);
-
-
+    if ( dir == 82)
+        body.at(0).y = body.at(0).y - cell;
 
 }
 
 int main()
 {
-    ushort stop = 200;         // задержка между кадрами
+    ushort pause = 200;         // задержка между кадрами
     IplImage *currFrame = 0;
     IplImage *field = 0;
     CvPoint appel;
     vector<CvPoint> body;           // для хранения элементов тела змеи
-    CvPoint cir;
+    CvPoint head;
 
     int finish = 30;
-    char c = 83;
+    char direction = 83;
     int width_field = 500;
     int height_field = 500;
     int cell = 50;
@@ -120,63 +100,82 @@ int main()
     cout << "количество в 1-й строке: " << box_x << endl;
     cout << "ширина и высота квадрата : " << cell <<endl;
 
-    field = cvCreateImage(cvSize(width_field, height_field), 8, 3);
-    cvSet(field, cvScalar(255, 255, 255));
-    currFrame = cvCreateImage(cvSize(width_field, height_field), 8, 3);
+    field = cvCreateImage( cvSize ( width_field, height_field) , 8, 3);
+    cvSet( field, cvScalar( 255, 255, 255));
+    currFrame = cvCreateImage( cvSize ( width_field, height_field) , 8, 3);
 
-    drawField( field, cell, box_x, box_y );                    // должен возвращать картинку
+    drawField( field, cell, box_x, box_y );// должен возвращать картинку
 
     const char * nwPlayField = "Змейка";
     cvNamedWindow( nwPlayField );
 
-    cvRectangle(field, cvPoint( 0,0), cvPoint(width_field, height_field), cvScalar(0, 0, 0),5);
-    cir.x = (rand() % box_x/2)+2;
-    cir.x =cir.x * cell/2;
-    cir.y = (rand() % box_y/2)+2;
-    cir.y = cir.y * cell/2;
+    //Рисуем стену, и задаем случайные координаты головы и заносим их в вектор
+    cvRectangle( field, cvPoint( 0,0), cvPoint( width_field, height_field), cvScalar(0, 0, 0),5);
+    head.x = ( rand() % box_x/2)+2;
+    head.x =head.x * cell/2;
+    head.y = ( rand() % box_y/2)+2;
+    head.y = head.y * cell/2;
+    body.push_back( head );
+
+    //рисуем  1-е яблоко
     int appel_x = rand() % box_x;
     int appel_y = rand() % box_y;
     appel.x = appel_x * cell+cell/2;
     appel.y = appel_y * cell+cell/2;
+
+    //r, g, b - цвет, number_of_apples - кол-во съединых яблок, рисуем 1-е яблоко
     int r, g, b;
     int number_of_apples = 0;
-    cvCircle(field, appel, 10, CV_RGB(11, 111, 222), -1, 8);
-    cout <<appel.x <<" "<< appel.y<<"          "<<number_of_apples<<"/"<<finish <<endl;
+    cvCircle( field, appel, 10, CV_RGB(11, 111, 222), -1, 8);
+    cout << appel.x << " " << appel.y << "          " << number_of_apples << "/" << finish << endl;
 
     while(1)
     {
         cvCopyImage( field, currFrame );
 
-        if (appel.x == cir.x && appel.y == cir.y  )
+        // это условие выполняется, когда голова съедает яблоко
+        //cout << "appel point (" << appel.x << ", " << appel.y << ")";
+        //cout << " head point (" << bodi
+        if (appel.x == body.at(0).x  && appel.y == body.at(0).y  )
         {
+            //закрашиваем съеденное яблоко
             cvFloodFill(field, appel, cvScalar(255, 255, 255));
 
-            drawFood(field,cell,box_x,box_y,appel, r, g, b);
+            // прибавить к туловищу змеи единицу
+            //body
+            // рисуем яблоко
+            drawFood( field, cell, box_x, box_y, appel, r, g, b);
+            // считаем количество съеденных яблок
             number_of_apples++;
-            stop = stop - 5;
-            cout <<appel.x <<" "<< appel.y<<"          "<<number_of_apples<<"/"<<finish <<endl;
-
+            // уменьшаем задержку(ускоряем змейку)
+            pause = pause - 5;
+            cout << appel.x << " " << appel.y << "          " <<number_of_apples << "/" << finish << endl;
         }
-        if (number_of_apples == finish - 1)
+        // обводим последнее яблоко
+        if ( number_of_apples == finish - 1)
         {
-            cvCircle(currFrame, cvPoint (appel.x , appel.y), 16, CV_RGB( 0, 250, 0), 2, 8);
-            cvCircle(currFrame, cvPoint (appel.x , appel.y), 13, CV_RGB( 0, 0, 250), 2, 8);
-            cvCircle(currFrame, cvPoint (appel.x , appel.y), 10, CV_RGB( 225, 0, 0), 2, 8);
+            cvCircle(currFrame, cvPoint (appel.x, appel.y), 16, CV_RGB( 0, 250, 0), 2, 8);
+            cvCircle(currFrame, cvPoint (appel.x, appel.y), 13, CV_RGB( 0, 0, 250), 2, 8);
+            cvCircle(currFrame, cvPoint (appel.x, appel.y), 10, CV_RGB( 225, 0, 0), 2, 8);
         }
+// управление змеей
+        char direc = cvWaitKey( pause );
+        if ( direc == 81 || direc == 82 || direc == 84 || direc == 83 )
+            direction = direc;
 
-        char cc = cvWaitKey(stop);
+        // перемещение змейки
+        moveSnake( direction, body, cell);
+        drawSnake( body, currFrame);
 
-        moveSnake(cc,c,cir,cell);
-        cvCircle(currFrame, cvPoint (cir.x , cir.y), 25, CV_RGB( 250, 0, 0), -1, 8);
-
-        if (cc == 27||finish == number_of_apples||cir.x < 0 || cir.x  == width_field || cir.x > width_field || cir.y < 0 || cir.y == height_field || cir.y > height_field)
+        // условия выхода из цикла
+        if (direc == 27 || finish == number_of_apples || body.at(0).x < 0 || body.at(0).x  == width_field || body.at(0).x > width_field || body.at(0).y < 0 || body.at(0).y == height_field || body.at(0).y > height_field)
         {
             break;
         }
 
         cvShowImage( nwPlayField, currFrame );
     }
-
+    // пишем текст взависимости от результата
     CvPoint pt = cvPoint( height_field/4, width_field/2 );
     CvFont font;
 
@@ -185,12 +184,12 @@ int main()
         cvInitFont( &font, CV_FONT_HERSHEY_COMPLEX,3.0, 2.0, 0, 2, CV_AA);
         cvPutText(currFrame, "W I N", pt, &font, CV_RGB(255, 255, 0) );
     }
-
     else
     {
         cvInitFont( &font, CV_FONT_HERSHEY_COMPLEX,2.0, 1.0, 0, 2, CV_AA);
         cvPutText(currFrame, "Game Over", pt, &font, CV_RGB(150, 0, 150) );
     }
+
     cvShowImage( nwPlayField, currFrame );
     cvWaitKey(10000);
 
