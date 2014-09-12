@@ -87,7 +87,7 @@ int main()
     vector<CvPoint> body;           // для хранения элементов тела змеи
     CvPoint head;
 
-    int finish = 30;
+    int finish = 10;
     char direction = 83;
     int width_field = 500;
     int height_field = 500;
@@ -117,6 +117,14 @@ int main()
     head.y = head.y * cell/2;
     body.push_back( head );
 
+    //создаем начальное тело змейки, и пустое место вектора
+    head.x = head.x - cell;
+    body.push_back( head );
+    head.x = head.x - cell;
+    body.push_back( head );
+    head.x = head.x - cell;
+    body.push_back( head );
+
     //рисуем  1-е яблоко
     int appel_x = rand() % box_x;
     int appel_y = rand() % box_y;
@@ -129,15 +137,35 @@ int main()
     cvCircle( field, appel, 10, CV_RGB(11, 111, 222), -1, 8);
     cout << appel.x << " " << appel.y << "          " << number_of_apples << "/" << finish << endl;
 
+    //номер тела
+    int number_of_bodies = 3;
+
     while(1)
     {
         cvCopyImage( field, currFrame );
+
+        //перемещение тела на место тела кот. было перед ним
+        body.at( number_of_bodies ) = body.at(2);
+        body.at(2) = body.at(1);
+        body.at(1) = body.at(0);
+        cvCircle( currFrame, body.at(1), 20, CV_RGB( 250, 250, 0), -1, 8);
+        cvCircle( currFrame, body.at(2), 20, CV_RGB( 250, 250, 0), -1, 8);
+
+        // создаем первое тело после съеденного яблока
+        if (number_of_apples > 0)
+        {
+            cvCircle( currFrame, body.at( number_of_bodies ), 20, CV_RGB( 10, 210, 110), -1, 8);
+        }
 
         // это условие выполняется, когда голова съедает яблоко
         //cout << "appel point (" << appel.x << ", " << appel.y << ")";
         //cout << " head point (" << bodi
         if (appel.x == body.at(0).x  && appel.y == body.at(0).y  )
         {
+            //присваиваем новому телу координаты яблока
+            body.push_back( appel );
+            //body.push_back(body.at(t));
+
             //закрашиваем съеденное яблоко
             cvFloodFill(field, appel, cvScalar(255, 255, 255));
 
@@ -158,7 +186,7 @@ int main()
             cvCircle(currFrame, cvPoint (appel.x, appel.y), 13, CV_RGB( 0, 0, 250), 2, 8);
             cvCircle(currFrame, cvPoint (appel.x, appel.y), 10, CV_RGB( 225, 0, 0), 2, 8);
         }
-// управление змеей
+        // управление змеей
         char direc = cvWaitKey( pause );
         if ( direc == 81 || direc == 82 || direc == 84 || direc == 83 )
             direction = direc;
@@ -172,7 +200,19 @@ int main()
         {
             break;
         }
-
+        //проигрыш в случае если голова повернет в сторону тела
+        if (( body.at(2).x == body.at(0).x  && body.at(2).y == body.at(0).y )||( body.at(1).x == body.at(0).x  && body.at(1).y == body.at(0).y))
+        {
+            break;
+        }
+        //выходим если созданное первое тело после съеденного яблока пересечется с головой
+        if ( number_of_apples > 0 )
+        {
+            if ( body.at ( number_of_bodies ).x == body.at(0).x  && body.at ( number_of_bodies ).y == body.at(0).y )
+            {
+                break;
+            }
+        }
         cvShowImage( nwPlayField, currFrame );
     }
     // пишем текст взависимости от результата
