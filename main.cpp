@@ -117,14 +117,31 @@ int main()
     head.y = head.y * cell/2;
     body.push_back( head );
 
-    //создаем начальное тело змейки, и пустое место вектора
+    //создаем начальное тело змейки и пустые вектора
     head.x = head.x - cell;
     body.push_back( head );
     head.x = head.x - cell;
     body.push_back( head );
     head.x = head.x - cell;
     body.push_back( head );
-
+    head.x = head.x - cell;
+    body.push_back( head );
+    head.x = head.x - cell;
+    body.push_back( head );
+    head.x = head.x - cell;
+    body.push_back( head );
+    head.x = head.x - cell;
+    body.push_back( head );
+    head.x = head.x - cell;
+    body.push_back( head );
+    head.x = head.x - cell;
+    body.push_back( head );
+    head.x = head.x - cell;
+    body.push_back( head );
+    head.x = head.x - cell;
+    body.push_back( head );
+    head.x = head.x - cell;
+    body.push_back( head );
     //рисуем  1-е яблоко
     int appel_x = rand() % box_x;
     int appel_y = rand() % box_y;
@@ -138,32 +155,76 @@ int main()
     cout << appel.x << " " << appel.y << "          " << number_of_apples << "/" << finish << endl;
 
     //номер тела
-    int number_of_bodies = 3;
+   // int number_of_bodies = 3;
 
     while(1)
     {
         cvCopyImage( field, currFrame );
 
         //перемещение тела на место тела кот. было перед ним
-        body.at( number_of_bodies ) = body.at(2);
+        body.at(12) = body.at(11);
+        body.at(11) = body.at(10);
+        body.at(10) = body.at(9);
+        body.at(9) = body.at(8);
+        body.at(8) = body.at(7);
+        body.at(7) = body.at(6);
+        body.at(6) = body.at(5);
+        body.at(5) = body.at(4);
+        body.at(4) = body.at(3);
+        body.at(3) = body.at(2);
         body.at(2) = body.at(1);
         body.at(1) = body.at(0);
         cvCircle( currFrame, body.at(1), 20, CV_RGB( 250, 250, 0), -1, 8);
         cvCircle( currFrame, body.at(2), 20, CV_RGB( 250, 250, 0), -1, 8);
 
-        // создаем первое тело после съеденного яблока
+        // создаем тело после съеденного яблока
         if (number_of_apples > 0)
         {
-            cvCircle( currFrame, body.at( number_of_bodies ), 20, CV_RGB( 10, 210, 110), -1, 8);
+            cvCircle( currFrame, body.at( 3 ), 20, CV_RGB( 10, 110, 110), -1, 8);
         }
-
+        if (number_of_apples > 1)
+        {
+            cvCircle( currFrame, body.at( 4 ), 20, CV_RGB( 10, 210, 210), -1, 8);
+        }
+        if (number_of_apples > 2)
+        {
+            cvCircle( currFrame, body.at( 5 ), 20, CV_RGB( 210, 10, 110), -1, 8);
+        }
+        if (number_of_apples > 3)
+        {
+            cvCircle( currFrame, body.at( 6 ), 20, CV_RGB( 150, 10, 110), -1, 8);
+        }
+        if (number_of_apples > 4)
+        {
+            cvCircle( currFrame, body.at( 7 ), 20, CV_RGB( 210, 20, 10), -1, 8);
+        }
+        if (number_of_apples > 5)
+        {
+            cvCircle( currFrame, body.at( 8 ), 20, CV_RGB( 210, 10, 210), -1, 8);
+        }
+        if (number_of_apples > 6)
+        {
+            cvCircle( currFrame, body.at( 9 ), 20, CV_RGB( 10, 210, 110), -1, 8);
+        }
+        if (number_of_apples > 7)
+        {
+            cvCircle( currFrame, body.at( 10 ), 20, CV_RGB( 160, 150, 110), -1, 8);
+        }
+        if (number_of_apples > 8)
+        {
+            cvCircle( currFrame, body.at( 11 ), 20, CV_RGB( 70, 160, 210), -1, 8);
+        }
+        if (number_of_apples > 9)
+        {
+            cvCircle( currFrame, body.at( 12 ), 20, CV_RGB( 100, 10, 210), -1, 8);
+        }
         // это условие выполняется, когда голова съедает яблоко
         //cout << "appel point (" << appel.x << ", " << appel.y << ")";
         //cout << " head point (" << bodi
         if (appel.x == body.at(0).x  && appel.y == body.at(0).y  )
         {
             //присваиваем новому телу координаты яблока
-            body.push_back( appel );
+           // body.push_back( appel );
             //body.push_back(body.at(t));
 
             //закрашиваем съеденное яблоко
@@ -205,10 +266,74 @@ int main()
         {
             break;
         }
-        //выходим если созданное первое тело после съеденного яблока пересечется с головой
+        //выходим если созданное  тело после съеденного яблока пересечется с головой
+        if ( number_of_apples > 1 )
+        {
+            if ( body.at ( 4 ).x == body.at(0).x  && body.at ( 4).y == body.at(0).y )
+            {
+                break;
+            }
+        }
+        if ( number_of_apples > 2 )
+        {
+            if ( body.at ( 5 ).x == body.at(0).x  && body.at ( 5 ).y == body.at(0).y )
+            {
+                break;
+            }
+        }
+        if ( number_of_apples > 3 )
+        {
+            if ( body.at ( 6 ).x == body.at(0).x  && body.at ( 6 ).y == body.at(0).y )
+            {
+                break;
+            }
+        }
+        if ( number_of_apples > 4 )
+        {
+            if ( body.at ( 7 ).x == body.at(0).x  && body.at ( 7 ).y == body.at(0).y )
+            {
+                break;
+            }
+        }
+        if ( number_of_apples > 5 )
+        {
+            if ( body.at ( 8 ).x == body.at(0).x  && body.at ( 8 ).y == body.at(0).y )
+            {
+                break;
+            }
+        }
+        if ( number_of_apples > 6 )
+        {
+            if ( body.at ( 9 ).x == body.at(0).x  && body.at ( 9 ).y == body.at(0).y )
+            {
+                break;
+            }
+        }
+        if ( number_of_apples > 7 )
+        {
+            if ( body.at ( 10 ).x == body.at(0).x  && body.at ( 10 ).y == body.at(0).y )
+            {
+                break;
+            }
+        }
+        if ( number_of_apples > 8 )
+        {
+            if ( body.at ( 11 ).x == body.at(0).x  && body.at ( 11 ).y == body.at(0).y )
+            {
+                break;
+            }
+        }
+        if ( number_of_apples > 9 )
+        {
+            if ( body.at ( 12 ).x == body.at(0).x  && body.at ( 12 ).y == body.at(0).y )
+            {
+                break;
+            }
+        }
+
         if ( number_of_apples > 0 )
         {
-            if ( body.at ( number_of_bodies ).x == body.at(0).x  && body.at ( number_of_bodies ).y == body.at(0).y )
+            if ( body.at ( 3 ).x == body.at(0).x  && body.at ( 3 ).y == body.at(0).y )
             {
                 break;
             }
