@@ -35,23 +35,133 @@ void drawField(IplImage *field, int cell, int box_x, int box_y)
 
 }
 
-void drawFood(IplImage *img,int cell, int box_x , int box_y,CvPoint &appel, int r,int g,int b)
+void drawFood(IplImage *img,int cell, int box_x , int box_y,CvPoint &appel, int r,int g,int b, int &ran)
 {
+    for (int i = 0; i < ran; i++)
+    {
+        r = (rand() % 200) + 25;
+        g = (rand() % 200) + 25;
+        b = (rand() % 200) + 25;
+        int appel_x = rand() % box_x;
+        int appel_y = rand() % box_y;
+        appel.x = appel_x * cell+cell/2;
+        appel.y = appel_y * cell+cell/2;
+    }
 
-    r = (rand() % 200) + 25;
-    g = (rand() % 200) + 25;
-    b = (rand() % 200) + 25;
-    int appel_x = rand() % box_x;
-    int appel_y = rand() % box_y;
-    appel.x = appel_x * cell+cell/2;
-    appel.y = appel_y * cell+cell/2;
     cvCircle(img, appel, 10, CV_RGB(r, g, b), -1, 8);
-
 }
 
-void drawSnake(vector<CvPoint> &body, IplImage *currFrame)
+void drawSnake(vector<CvPoint> &body, IplImage *currFrame, int &number_of_apples)
 {
-    cvCircle(currFrame, body.at(0), 25, CV_RGB( 250, 0, 0), -1, 8);
+    //перемещение тела на место тела кот. было перед ним
+    body.at(23) = body.at(22);
+    body.at(22) = body.at(21);
+    body.at(21) = body.at(20);
+    body.at(20) = body.at(19);
+    body.at(19) = body.at(18);
+    body.at(18) = body.at(17);
+    body.at(17) = body.at(16);
+    body.at(16) = body.at(15);
+    body.at(15) = body.at(14);
+    body.at(14) = body.at(13);
+    body.at(13) = body.at(12);
+    body.at(12) = body.at(11);
+    body.at(11) = body.at(10);
+    body.at(10) = body.at(9);
+    body.at(9) = body.at(8);
+    body.at(8) = body.at(7);
+    body.at(7) = body.at(6);
+    body.at(6) = body.at(5);
+    body.at(5) = body.at(4);
+    body.at(4) = body.at(3);
+    body.at(3) = body.at(2);
+    body.at(2) = body.at(1);
+    body.at(1) = body.at(0);
+
+    cvCircle( currFrame, body.at(1), 20, CV_RGB( 250, 250, 0), -1, 8);
+    cvCircle( currFrame, body.at(2), 20, CV_RGB( 250, 250, 0), -1, 8);
+
+    // создаем тело после съеденного яблока
+    if (number_of_apples > 0)
+    {
+        cvCircle( currFrame, body.at( 3 ), 20, CV_RGB( 10, 110, 110), -1, 8);
+    }
+    if (number_of_apples > 1)
+    {
+        cvCircle( currFrame, body.at( 4 ), 20, CV_RGB( 10, 210, 210), -1, 8);
+    }
+    if (number_of_apples > 2)
+    {
+        cvCircle( currFrame, body.at( 5 ), 20, CV_RGB( 210, 10, 110), -1, 8);
+    }
+    if (number_of_apples > 3)
+    {
+        cvCircle( currFrame, body.at( 6 ), 20, CV_RGB( 150, 10, 110), -1, 8);
+    }
+    if (number_of_apples > 4)
+    {
+        cvCircle( currFrame, body.at( 7 ), 20, CV_RGB( 210, 20, 10), -1, 8);
+    }
+    if (number_of_apples > 5)
+    {
+        cvCircle( currFrame, body.at( 8 ), 20, CV_RGB( 210, 10, 210), -1, 8);
+    }
+    if (number_of_apples > 6)
+    {
+        cvCircle( currFrame, body.at( 9 ), 20, CV_RGB( 10, 210, 110), -1, 8);
+    }
+    if (number_of_apples > 7)
+    {
+        cvCircle( currFrame, body.at( 10 ), 20, CV_RGB( 160, 150, 110), -1, 8);
+    }
+    if (number_of_apples > 8)
+    {
+        cvCircle( currFrame, body.at( 11 ), 20, CV_RGB( 70, 160, 210), -1, 8);
+    }
+    if (number_of_apples > 9)
+    {
+        cvCircle( currFrame, body.at( 12 ), 20, CV_RGB( 100, 10, 210), -1, 8);
+    }
+    if (number_of_apples > 10)
+    {
+        cvCircle( currFrame, body.at( 13 ), 20, CV_RGB( 0, 210, 210), -1, 8);
+    }
+    if (number_of_apples > 11)
+    {
+        cvCircle( currFrame, body.at( 14 ), 20, CV_RGB( 210, 210, 20), -1, 8);
+    }
+    if (number_of_apples > 12)
+    {
+        cvCircle( currFrame, body.at( 15 ), 20, CV_RGB( 70, 80, 110), -1, 8);
+    }
+    if (number_of_apples > 13)
+    {
+        cvCircle( currFrame, body.at( 16 ), 20, CV_RGB( 150, 10, 110), -1, 8);
+    }
+    if (number_of_apples > 14)
+    {
+        cvCircle( currFrame, body.at( 17 ), 20, CV_RGB( 210, 20, 210), -1, 8);
+    }
+    if (number_of_apples > 15)
+    {
+        cvCircle( currFrame, body.at( 18 ), 20, CV_RGB( 250, 110, 10), -1, 8);
+    }
+    if (number_of_apples > 16)
+    {
+        cvCircle( currFrame, body.at( 19 ), 20, CV_RGB( 10, 200, 240), -1, 8);
+    }
+    if (number_of_apples > 17)
+    {
+        cvCircle( currFrame, body.at( 20 ), 20, CV_RGB( 100, 250, 200), -1, 8);
+    }
+    if (number_of_apples > 18)
+    {
+        cvCircle( currFrame, body.at( 21 ), 20, CV_RGB( 0, 250, 170), -1, 8);
+    }
+    if (number_of_apples > 19)
+    {
+        cvCircle( currFrame, body.at( 22 ), 20, CV_RGB( 90, 0, 120), -1, 8);
+    }
 
 }
 
@@ -77,7 +187,44 @@ void moveSnake( char &dir, vector<CvPoint> &body, int cell)
         body.at(0).y = body.at(0).y - cell;
 
 }
+void end_snake(char &direc, int &finish, int &number_of_apples, vector<CvPoint> &body, int &width_field, int &height_field, int &exit)
+{
+    // условия выхода из цикла
+    if (direc == 27 || finish == number_of_apples || body.at(0).x < 0 || body.at(0).x  == width_field || body.at(0).x > width_field || body.at(0).y < 0 || body.at(0).y == height_field || body.at(0).y > height_field)
+    {
+        exit=1;
+    }
+    //проигрыш в случае если голова повернет в сторону тела
+    if (( body.at(2).x == body.at(0).x  && body.at(2).y == body.at(0).y )||( body.at(1).x == body.at(0).x  && body.at(1).y == body.at(0).y))
+    {
+        exit=1;
+    }
+    //выходим если созданное  тело после съеденного яблока пересечется с головой
+    if ((( number_of_apples > 1 )&&( body.at ( 4 ).x == body.at(0).x  && body.at ( 4).y == body.at(0).y )) ||
+            ((number_of_apples > 2)&&(body.at ( 5 ).x == body.at(0).x  && body.at ( 5 ).y == body.at(0).y))||
+            ((number_of_apples > 3)&&(body.at ( 6 ).x == body.at(0).x  && body.at ( 6 ).y == body.at(0).y))||
+            ((number_of_apples > 4)&&(body.at ( 7 ).x == body.at(0).x  && body.at ( 7 ).y == body.at(0).y))||
+            ((number_of_apples > 5)&&(body.at ( 8 ).x == body.at(0).x  && body.at ( 8 ).y == body.at(0).y))||
+            ((number_of_apples > 6)&&(body.at ( 9 ).x == body.at(0).x  && body.at ( 9 ).y == body.at(0).y))||
+            ((number_of_apples > 7)&&(body.at ( 10 ).x == body.at(0).x  && body.at ( 10 ).y == body.at(0).y))||
+            ((number_of_apples > 8)&&(body.at ( 11 ).x == body.at(0).x  && body.at ( 11 ).y == body.at(0).y))||
+            ((number_of_apples > 9)&&(body.at ( 12).x == body.at(0).x  && body.at ( 12 ).y == body.at(0).y))||
+            ((number_of_apples > 10)&&(body.at ( 13 ).x == body.at(0).x  && body.at ( 13 ).y == body.at(0).y))||
+            ((number_of_apples > 11)&&(body.at ( 14 ).x == body.at(0).x  && body.at ( 14 ).y == body.at(0).y))||
+            ((number_of_apples > 12)&&(body.at ( 15 ).x == body.at(0).x  && body.at ( 15 ).y == body.at(0).y))||
+            ((number_of_apples > 13)&&(body.at ( 16 ).x == body.at(0).x  && body.at ( 16 ).y == body.at(0).y))||
+            ((number_of_apples > 14)&&(body.at ( 17 ).x == body.at(0).x  && body.at ( 17 ).y == body.at(0).y))||
+            ((number_of_apples > 15)&&(body.at ( 18 ).x == body.at(0).x  && body.at ( 18 ).y == body.at(0).y))||
+            ((number_of_apples > 16)&&(body.at ( 19 ).x == body.at(0).x  && body.at ( 19).y == body.at(0).y))||
+            ((number_of_apples > 17)&&(body.at ( 20 ).x == body.at(0).x  && body.at ( 20 ).y == body.at(0).y))||
+            ((number_of_apples > 18)&&(body.at ( 21).x == body.at(0).x  && body.at ( 21 ).y == body.at(0).y))||
+            ((number_of_apples > 19)&&(body.at ( 22 ).x == body.at(0).x  && body.at ( 22 ).y == body.at(0).y))||
+            ((number_of_apples > 0)&&(body.at ( 3 ).x == body.at(0).x  && body.at ( 3 ).y == body.at(0).y)))
 
+    {
+        exit=1;
+    }
+}
 int main()
 {
     ushort pause = 200;         // задержка между кадрами
@@ -94,6 +241,7 @@ int main()
     int cell = 50;
     int box_x = width_field/cell;
     int box_y = height_field/cell;
+    int exit = 0;
 
     cout << "количество квадратов: "    << box_x*box_y <<endl;
     cout << "количество в 1-м столбе: " << box_y << endl;
@@ -118,39 +266,13 @@ int main()
     body.push_back( head );
 
     //создаем начальное тело змейки и пустые вектора
-  for (int i = 0; i < finish + 5; i++)
+    for (int i = 0; i < finish + 5; i++)
     {
-      head.x = head.x - cell;
-      body.push_back( head );
-  }
+        head.x = head.x - cell;
+        body.push_back( head );
+    }
 
-      /*
-    head.x = head.x - cell;
-    body.push_back( head );
-    head.x = head.x - cell;
-    body.push_back( head );
-    head.x = head.x - cell;
-    body.push_back( head );
-    head.x = head.x - cell;
-    body.push_back( head );
-    head.x = head.x - cell;
-    body.push_back( head );
-    head.x = head.x - cell;
-    body.push_back( head );
-    head.x = head.x - cell;
-    body.push_back( head );
-    head.x = head.x - cell;
-    body.push_back( head );
-    head.x = head.x - cell;
-    body.push_back( head );
-    head.x = head.x - cell;
-    body.push_back( head );
-    head.x = head.x - cell;
-    body.push_back( head );
-    head.x = head.x - cell;
-    body.push_back( head );
-*/
-//рисуем  1-е яблоко
+    //рисуем  1-е яблоко
     int appel_x = rand() % box_x;
     int appel_y = rand() % box_y;
     appel.x = appel_x * cell+cell/2;
@@ -162,129 +284,22 @@ int main()
     cvCircle( field, appel, 10, CV_RGB(11, 111, 222), -1, 8);
     cout << appel.x << " " << appel.y << "          " << number_of_apples << "/" << finish << endl;
 
-    //номер тела
-   // int number_of_bodies = 3;
+    //создаем рандом
+    int ran=1;
 
     while(1)
     {
         cvCopyImage( field, currFrame );
 
-        //перемещение тела на место тела кот. было перед ним
+        //создаем рандом для яблок
+        ran++;
+        if (ran == 100)ran = 1;
 
-        body.at(23) = body.at(22);
-        body.at(22) = body.at(21);
-        body.at(21) = body.at(20);
-        body.at(20) = body.at(19);
-        body.at(19) = body.at(18);
-        body.at(18) = body.at(17);
-        body.at(17) = body.at(16);
-        body.at(16) = body.at(15);
-        body.at(15) = body.at(14);
-        body.at(14) = body.at(13);
-        body.at(13) = body.at(12);
-        body.at(12) = body.at(11);
-        body.at(11) = body.at(10);
-        body.at(10) = body.at(9);
-        body.at(9) = body.at(8);
-        body.at(8) = body.at(7);
-        body.at(7) = body.at(6);
-        body.at(6) = body.at(5);
-        body.at(5) = body.at(4);
-        body.at(4) = body.at(3);
-        body.at(3) = body.at(2);
-        body.at(2) = body.at(1);
-        body.at(1) = body.at(0);
-        cvCircle( currFrame, body.at(1), 20, CV_RGB( 250, 250, 0), -1, 8);
-        cvCircle( currFrame, body.at(2), 20, CV_RGB( 250, 250, 0), -1, 8);
-
-        // создаем тело после съеденного яблока
-        if (number_of_apples > 0)
-        {
-            cvCircle( currFrame, body.at( 3 ), 20, CV_RGB( 10, 110, 110), -1, 8);
-        }
-        if (number_of_apples > 1)
-        {
-            cvCircle( currFrame, body.at( 4 ), 20, CV_RGB( 10, 210, 210), -1, 8);
-        }
-        if (number_of_apples > 2)
-        {
-            cvCircle( currFrame, body.at( 5 ), 20, CV_RGB( 210, 10, 110), -1, 8);
-        }
-        if (number_of_apples > 3)
-        {
-            cvCircle( currFrame, body.at( 6 ), 20, CV_RGB( 150, 10, 110), -1, 8);
-        }
-        if (number_of_apples > 4)
-        {
-            cvCircle( currFrame, body.at( 7 ), 20, CV_RGB( 210, 20, 10), -1, 8);
-        }
-        if (number_of_apples > 5)
-        {
-            cvCircle( currFrame, body.at( 8 ), 20, CV_RGB( 210, 10, 210), -1, 8);
-        }
-        if (number_of_apples > 6)
-        {
-            cvCircle( currFrame, body.at( 9 ), 20, CV_RGB( 10, 210, 110), -1, 8);
-        }
-        if (number_of_apples > 7)
-        {
-            cvCircle( currFrame, body.at( 10 ), 20, CV_RGB( 160, 150, 110), -1, 8);
-        }
-        if (number_of_apples > 8)
-        {
-            cvCircle( currFrame, body.at( 11 ), 20, CV_RGB( 70, 160, 210), -1, 8);
-        }
-        if (number_of_apples > 9)
-        {
-            cvCircle( currFrame, body.at( 12 ), 20, CV_RGB( 100, 10, 210), -1, 8);
-        }
-        if (number_of_apples > 10)
-        {
-            cvCircle( currFrame, body.at( 13 ), 20, CV_RGB( 0, 210, 210), -1, 8);
-        }
-        if (number_of_apples > 11)
-        {
-            cvCircle( currFrame, body.at( 14 ), 20, CV_RGB( 210, 210, 20), -1, 8);
-        }
-        if (number_of_apples > 12)
-        {
-            cvCircle( currFrame, body.at( 15 ), 20, CV_RGB( 70, 80, 110), -1, 8);
-        }
-        if (number_of_apples > 13)
-        {
-            cvCircle( currFrame, body.at( 16 ), 20, CV_RGB( 150, 10, 110), -1, 8);
-        }
-        if (number_of_apples > 14)
-        {
-            cvCircle( currFrame, body.at( 17 ), 20, CV_RGB( 210, 20, 210), -1, 8);
-        }
-        if (number_of_apples > 15)
-        {
-            cvCircle( currFrame, body.at( 18 ), 20, CV_RGB( 250, 110, 10), -1, 8);
-        }
-        if (number_of_apples > 16)
-        {
-            cvCircle( currFrame, body.at( 19 ), 20, CV_RGB( 10, 200, 240), -1, 8);
-        }
-        if (number_of_apples > 17)
-        {
-            cvCircle( currFrame, body.at( 20 ), 20, CV_RGB( 100, 250, 200), -1, 8);
-        }
-        if (number_of_apples > 18)
-        {
-            cvCircle( currFrame, body.at( 21 ), 20, CV_RGB( 0, 250, 170), -1, 8);
-        }
-        if (number_of_apples > 19)
-        {
-            cvCircle( currFrame, body.at( 22 ), 20, CV_RGB( 90, 0, 120), -1, 8);
-        }
         // это условие выполняется, когда голова съедает яблоко
-        //cout << "appel point (" << appel.x << ", " << appel.y << ")";
-        //cout << " head point (" << bodi
         if (appel.x == body.at(0).x  && appel.y == body.at(0).y  )
         {
             //присваиваем новому телу координаты яблока
-           // body.push_back( appel );
+            // body.push_back( appel );
             //body.push_back(body.at(t));
 
             //закрашиваем съеденное яблоко
@@ -293,7 +308,7 @@ int main()
             // прибавить к туловищу змеи единицу
             //body
             // рисуем яблоко
-            drawFood( field, cell, box_x, box_y, appel, r, g, b);
+            drawFood( field, cell, box_x, box_y, appel, r, g, b, ran);
             // считаем количество съеденных яблок
             number_of_apples++;
             // уменьшаем задержку(ускоряем змейку)
@@ -313,106 +328,16 @@ int main()
             direction = direc;
 
         // перемещение змейки
+        drawSnake( body, currFrame, number_of_apples);
         moveSnake( direction, body, cell);
-        drawSnake( body, currFrame);
+        cvCircle(currFrame, body.at(0), 25, CV_RGB( 250, 0, 0), -1, 8);
+        // конец змеи
+        end_snake(direc, finish, number_of_apples, body, width_field, height_field, exit);
+        if (exit == 1) break;
 
-        // условия выхода из цикла
-        if (direc == 27 || finish == number_of_apples || body.at(0).x < 0 || body.at(0).x  == width_field || body.at(0).x > width_field || body.at(0).y < 0 || body.at(0).y == height_field || body.at(0).y > height_field)
-        {
-            break;
-        }
-        //проигрыш в случае если голова повернет в сторону тела
-        if (( body.at(2).x == body.at(0).x  && body.at(2).y == body.at(0).y )||( body.at(1).x == body.at(0).x  && body.at(1).y == body.at(0).y))
-        {
-            break;
-        }
-        //выходим если созданное  тело после съеденного яблока пересечется с головой
-        if ((( number_of_apples > 1 )&&( body.at ( 4 ).x == body.at(0).x  && body.at ( 4).y == body.at(0).y )) ||
-                ((number_of_apples > 2)&&(body.at ( 5 ).x == body.at(0).x  && body.at ( 5 ).y == body.at(0).y))||
-                   ((number_of_apples > 3)&&(body.at ( 6 ).x == body.at(0).x  && body.at ( 6 ).y == body.at(0).y))||
-                   ((number_of_apples > 4)&&(body.at ( 7 ).x == body.at(0).x  && body.at ( 7 ).y == body.at(0).y))||
-                   ((number_of_apples > 5)&&(body.at ( 8 ).x == body.at(0).x  && body.at ( 8 ).y == body.at(0).y))||
-                   ((number_of_apples > 6)&&(body.at ( 9 ).x == body.at(0).x  && body.at ( 9 ).y == body.at(0).y))||
-                   ((number_of_apples > 7)&&(body.at ( 10 ).x == body.at(0).x  && body.at ( 10 ).y == body.at(0).y))||
-                   ((number_of_apples > 8)&&(body.at ( 11 ).x == body.at(0).x  && body.at ( 11 ).y == body.at(0).y))||
-                   ((number_of_apples > 9)&&(body.at ( 12).x == body.at(0).x  && body.at ( 12 ).y == body.at(0).y))||
-                   ((number_of_apples > 10)&&(body.at ( 13 ).x == body.at(0).x  && body.at ( 13 ).y == body.at(0).y))||
-                ((number_of_apples > 11)&&(body.at ( 14 ).x == body.at(0).x  && body.at ( 14 ).y == body.at(0).y))||
-                   ((number_of_apples > 12)&&(body.at ( 15 ).x == body.at(0).x  && body.at ( 15 ).y == body.at(0).y))||
-                   ((number_of_apples > 13)&&(body.at ( 16 ).x == body.at(0).x  && body.at ( 16 ).y == body.at(0).y))||
-                   ((number_of_apples > 14)&&(body.at ( 17 ).x == body.at(0).x  && body.at ( 17 ).y == body.at(0).y))||
-                   ((number_of_apples > 15)&&(body.at ( 18 ).x == body.at(0).x  && body.at ( 18 ).y == body.at(0).y))||
-                   ((number_of_apples > 16)&&(body.at ( 19 ).x == body.at(0).x  && body.at ( 19).y == body.at(0).y))||
-                   ((number_of_apples > 17)&&(body.at ( 20 ).x == body.at(0).x  && body.at ( 20 ).y == body.at(0).y))||
-                   ((number_of_apples > 18)&&(body.at ( 21).x == body.at(0).x  && body.at ( 21 ).y == body.at(0).y))||
-                   ((number_of_apples > 19)&&(body.at ( 22 ).x == body.at(0).x  && body.at ( 22 ).y == body.at(0).y))||
-                ((number_of_apples > 0)&&(body.at ( 3 ).x == body.at(0).x  && body.at ( 3 ).y == body.at(0).y)))
-
-            {
-                break;
-            }
-
-
-       /* if ( number_of_apples > 3 )
-        {
-            if ( body.at ( 6 ).x == body.at(0).x  && body.at ( 6 ).y == body.at(0).y )
-            {
-                break;
-            }
-        }
-        if ( number_of_apples > 4 )
-        {
-            if ( body.at ( 7 ).x == body.at(0).x  && body.at ( 7 ).y == body.at(0).y )
-            {
-                break;
-            }
-        }
-        if ( number_of_apples > 5 )
-        {
-            if ( body.at ( 8 ).x == body.at(0).x  && body.at ( 8 ).y == body.at(0).y )
-            {
-                break;
-            }
-        }
-        if ( number_of_apples > 6 )
-        {
-            if ( body.at ( 9 ).x == body.at(0).x  && body.at ( 9 ).y == body.at(0).y )
-            {
-                break;
-            }
-        }
-        if ( number_of_apples > 7 )
-        {
-            if ( body.at ( 10 ).x == body.at(0).x  && body.at ( 10 ).y == body.at(0).y )
-            {
-                break;
-            }
-        }
-        if ( number_of_apples > 8 )
-        {
-            if ( body.at ( 11 ).x == body.at(0).x  && body.at ( 11 ).y == body.at(0).y )
-            {
-                break;
-            }
-        }
-        if ( number_of_apples > 9 )
-        {
-            if ( body.at ( 12 ).x == body.at(0).x  && body.at ( 12 ).y == body.at(0).y )
-            {
-                break;
-            }
-        }
-
-        if ( number_of_apples > 0 )
-        {
-            if ( body.at ( 3 ).x == body.at(0).x  && body.at ( 3 ).y == body.at(0).y )
-            {
-                break;
-            }
-
-}*/
         cvShowImage( nwPlayField, currFrame );
     }
+
     // пишем текст взависимости от результата
     CvPoint pt = cvPoint( height_field/4, width_field/2 );
     CvFont font;
